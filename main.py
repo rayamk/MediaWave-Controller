@@ -1,7 +1,5 @@
-from flask import Flask, request, jsonify, render_template
-from services.logger import get_logger
-from services.tv_monitor import start_monitor
-from services.subtitle import translate_subtitle
+from flask import Flask, render_template, jsonify
+from services.tv_monitor import get_tv_status
 
 app = Flask(__name__)
 TV_IP = "192.168.1.100"
@@ -10,15 +8,9 @@ TV_IP = "192.168.1.100"
 def index():
     return render_template("index.html")
 
-@app.route("/status")
-def get_status():
-    return jsonify({"online": start_monitor(TV_IP)})
-
-@app.route("/translate", methods=['POST'])
-def translate():
-    data = request.json
-    text = data.get("text", "")
-    return jsonify({"translated": translate_subtitle(text)})
+@app.route("/api/status")
+def status():
+    return jsonify({"status": get_tv_status(TV_IP)})
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000)

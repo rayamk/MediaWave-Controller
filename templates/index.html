@@ -1,31 +1,14 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <title>MediaWave Controller</title>
-    <style>
-        body { font-family: sans-serif; padding: 20px; }
-        textarea { width: 100%; height: 100px; }
-        button { padding: 10px 20px; margin-top: 10px; cursor: pointer; }
-    </style>
-</head>
 <body>
-    <h2>Subtitle Translator</h2>
-    <textarea id="inputText" placeholder="စာသားထည့်ပါ..."></textarea><br>
-    <button onclick="translateText()">Translate</button>
-    <h3>Result:</h3>
-    <p id="result"></p>
-
+    <h1>TV Monitoring Dashboard</h1>
+    <div id="status">Checking TV Status...</div>
     <script>
-        async function translateText() {
-            const text = document.getElementById('inputText').value;
-            const response = await fetch('/translate', {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({text: text})
+        fetch('/api/status')
+            .then(res => res.json())
+            .then(data => {
+                document.getElementById('status').innerText = "Status: " + data.status;
             });
-            const data = await response.json();
-            document.getElementById('result').innerText = data.translated;
-        }
     </script>
 </body>
 </html>
