@@ -1,10 +1,25 @@
-from fastapi import FastAPI
+from flask import Flask, request, jsonify, render_template
+from services.logger import get_logger
+from services.tv_monitor import start_monitor
+from services.subtitle import translate_subtitle
 
-app = FastAPI()
+app = Flask(__name__)
+TV_IP = "192.168.1.100"
 
-@app.get("/")
-def read_root():
-    return {"message": "Welcome to MediaWave Controller"}
+@app.route("/")
+def index():
+    return render_template("index.html")
 
-# နောက်ပိုင်းမှာ ဒီမှာပဲ TV Monitor နဲ့ Translator routes တွေကို ထပ်ဖြည့်သွားမှာပါ
+@app.route("/status")
+def get_status():
+    return jsonify({"online": start_monitor(TV_IP)})
+
+@app.route("/translate", methods=['POST'])
+def translate():
+    data = request.json
+    text = data.get("text", "")
+    return jsonify({"translated": translate_subtitle(text)})
+
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=5000)
 
