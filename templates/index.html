@@ -1,15 +1,1 @@
-<!DOCTYPE html>
-<html>
-<body>
-    <h1>TV Monitoring Dashboard</h1>
-    <div id="status">Checking TV Status...</div>
-    <script>
-        fetch('/api/status')
-            .then(res => res.json())
-            .then(data => {
-                document.getElementById('status').innerText = "Status: " + data.status;
-            });
-    </script>
-</body>
-</html>
-
+<!DOCTYPE html><html><body><h1>TV Monitoring Dashboard</h1><div id="status">Updating...</div><script>setInterval(()=>{fetch("/api/status").then(r=>r.json()).then(d=>document.getElementById("status").innerText="Status: "+d.status)},3000);</script></body></html>
